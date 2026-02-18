@@ -1,6 +1,6 @@
 ---
 name: "harness"
-displayName: "Harness - DevOps & Software Delivery Platform"
+displayName: "Ship software with Harness"
 description: "Interact with the full Harness platform — CI/CD pipelines, cloud cost management, security testing, chaos engineering, feature flags, DORA metrics, GitOps, Internal Developer Portal, and more — all from your IDE."
 keywords: ["devops", "ci/cd", "pipelines", "deployments", "cloud costs", "security", "chaos engineering", "feature flags", "dora metrics", "gitops", "idp", "developer portal", "harness", "continuous delivery", "sre", "supply chain", "observability"]
 author: "Harness"
