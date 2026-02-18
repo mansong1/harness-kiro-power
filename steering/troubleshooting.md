@@ -457,6 +457,62 @@ Quick reference to avoid confusion:
 
 ---
 
+## Domain-Specific Issues
+
+### Cloud Cost Management (CCM)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `get_ccm_overview` returns empty | No cloud connector configured | Add "ccm" to `HARNESS_TOOLSETS`; verify AWS/GCP/Azure connector exists |
+| Perspectives return no cost data | Cloud connector not yet synced | Wait 24h after first connector setup; costs sync daily |
+| `list_ccm_recommendations` is empty | Feature not licensed or no data yet | Verify CCM license; ensure cloud connector has been active ≥7 days |
+| Anomaly detection not firing | Insufficient baseline data | Anomaly detection needs 30+ days of cost history |
+
+### Supply Chain Security (SCS) and STO
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `list_artifacts_scs` returns empty | No SBOM orchestration configured | Set up SCS pipeline stage; add "scs" to toolsets |
+| `download_sbom` fails | No orchestration for this artifact | Run an SBOM generation pipeline first |
+| STO issues list is empty | No scan pipelines configured | Add STO scanner step to CI pipeline |
+| Compliance checks all UNKNOWN | Compliance framework not assigned | Assign CIS/OWASP framework in SCS settings |
+
+### Chaos Engineering
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `chaos_experiments_list` is empty | No chaos infrastructure connected | Deploy ChaosCenter agent to target cluster |
+| Experiment run returns error | Chaos infrastructure offline | Check agent pod status in the target namespace |
+| Probes all failing | Target service not running | Verify the service under test is healthy before running |
+| `chaos_experiment_run` tool missing | "chaos" not in toolsets | Add "chaos" to `HARNESS_TOOLSETS` |
+
+### GitOps
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `gitops_list_applications` empty | GitOps agent not connected | Deploy GitOps agent; verify it's healthy in the Harness UI |
+| Apps show OutOfSync constantly | Auto-sync disabled | Enable auto-sync in app settings, or sync manually |
+| `gitops_get_app_resource_tree` fails | App not found at specified scope | Verify org_id/project_id match where the GitOps app was created |
+
+### Feature Management & Experimentation (FME)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `list_fme_workspaces` empty | FME not provisioned | FME requires separate workspace setup; contact Harness support |
+| Flag not found | Wrong workspace or environment | List all workspaces first; verify environment name matches exactly |
+| `get_fme_feature_flag_definition` 404 | Flag name is case-sensitive | Use the exact flag name from `list_fme_feature_flags` |
+
+### SEI / DORA Metrics
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| All DORA metrics return 0 | No SEI integrations configured | SEI requires SCM/CI integrations to be set up first |
+| `sei_get_teams_list` empty | No org tree configured | Set up org tree and teams in SEI settings |
+| Lead time shows NULL | No PR-to-deploy correlation | Requires both GitHub/GitLab + Harness CD integrations in SEI |
+| `sei_*` tools not found | "sei" not in toolsets | Add "sei" to `HARNESS_TOOLSETS` |
+
+---
+
 ## Getting Additional Help
 
 1. **Harness Docs:** https://developer.harness.io/docs
