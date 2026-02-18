@@ -145,14 +145,6 @@ The steering files give Kiro step-by-step workflow knowledge for Harness — loa
 | **Product Manager** | Check feature flag status, review release notes, track environment promotions |
 | **Developer** | Debug failing pipelines, review PR checks, check IDP scorecard |
 
-## Development
-
-```bash
-npm install
-npm test           # run all tests
-npm run test:unit  # unit tests only
-```
-
 ## License
 
 Apache 2.0 — see [LICENSE](./LICENSE)

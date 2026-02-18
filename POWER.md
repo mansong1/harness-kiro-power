@@ -77,7 +77,6 @@ Or use the Docker image variant in `mcp.json` — no local Go installation requi
 This power has the following steering files:
 
 - **workflows** — Complete multi-step workflow guides: list→inspect→debug→trigger→promote→release notes
-- **testing** — Unit, contract, integration, and negative test plans with sample cases
 - **troubleshooting** — Auth failures, missing scopes, pagination, rate limits, partial results
 
 ---

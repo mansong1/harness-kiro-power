@@ -3,13 +3,3 @@ mcp.local.json
 .env
 .env.local
 .DS_Store
-
-# Dependencies
-node_modules/
-
-# Build output
-dist/
-build/
-
-# Test coverage
-coverage/
