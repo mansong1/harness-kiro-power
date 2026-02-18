@@ -1,0 +1,5 @@
+# Local overrides with secrets (if you copy mcp.json to mcp.local.json)
+mcp.local.json
+.env
+.env.local
+.DS_Store
