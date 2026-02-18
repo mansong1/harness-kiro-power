@@ -1,23 +1,30 @@
 ---
 name: "harness"
-displayName: "Harness CI/CD Platform"
-description: "Manage Harness pipelines, deployments, services, and environments - list executions, debug failures, trigger pipelines, promote builds, and generate release notes via the Harness MCP server."
-keywords: ["harness", "ci/cd", "pipeline", "deployment", "devops", "execution", "service", "environment", "release", "gitops", "feature-flag", "secrets", "connector", "approval", "promote"]
+displayName: "Harness - DevOps & Software Delivery Platform"
+description: "Interact with the full Harness platform — CI/CD pipelines, cloud cost management, security testing, chaos engineering, feature flags, DORA metrics, GitOps, Internal Developer Portal, and more — all from your IDE."
+keywords: ["devops", "ci/cd", "pipelines", "deployments", "cloud costs", "security", "chaos engineering", "feature flags", "dora metrics", "gitops", "idp", "developer portal", "harness", "continuous delivery", "sre", "supply chain", "observability"]
 author: "Harness"
 ---
 
-# Harness CI/CD Platform Power
+# Harness — DevOps & Software Delivery Platform
 
 ## Overview
 
-The Harness Power gives your AI agent full access to the Harness platform through the official Harness MCP server. Query pipelines, inspect failing executions, trigger deployments, promote builds across environments, and generate release notes — all from natural language in Kiro.
+[Harness](https://www.harness.io/) is a comprehensive software delivery platform that provides CI/CD, cloud cost management, feature flags, chaos engineering, security testing, and more — all unified under a single DevOps experience.
+
+This power connects you to the **Harness MCP server**, giving you access to 150+ tools spanning 24 toolsets across the entire Harness platform — all from natural language in Kiro.
 
 **Key capabilities:**
-- **Pipeline Management** — List, inspect, trigger, and summarize pipelines and executions
-- **Failure Debugging** — Fetch execution details, failing step logs, and generate root-cause summaries
+- **CI/CD Pipelines** — List, inspect, trigger, and summarize pipelines and executions; debug failures
+- **Cloud Cost Management** — View cost overviews, perspectives, recommendations, and anomalies
+- **Security & Compliance** — Supply chain security, vulnerability remediation, SBOMs, and security test results
+- **Chaos Engineering** — Browse, run, and analyze chaos experiments and probes
+- **Feature Flags** — List and inspect feature flag definitions across workspaces and environments
+- **DORA Metrics** — Track deployment frequency, lead time, change failure rate, and MTTR
+- **GitOps** — Monitor application sync status, clusters, and resource trees
+- **Internal Developer Portal** — Query the service catalog, scorecards, and technical documentation
 - **Deployment Promotion** — Promote builds between environments with approval gate awareness
 - **Release Notes** — Generate structured release summaries from the last successful execution
-- **Service & Environment Visibility** — Browse services, environments, connectors, secrets, and infrastructure
 
 **Authentication:** Requires a Harness Personal Access Token (PAT) with appropriate scopes.
 
@@ -81,7 +88,7 @@ This power has the following steering files:
 **Package:** `harness/mcp-server` (local binary or Docker)
 **Connection:** STDIO
 
-**Toolsets enabled:** `pipelines,logs,services,environments,connectors,secrets,templates,audit`
+**Toolsets enabled:** `all` (24 toolsets — see Tools by Category below)
 
 ---
 
@@ -109,6 +116,249 @@ The Power performs **dynamic tool discovery** before every workflow. It matches 
 4. Warn user if a required tool is absent (e.g. download_execution_logs not in toolset)
 5. Proceed with matched tools; gracefully degrade if optional tools are missing
 ```
+
+---
+
+## Tools by Category
+
+### Pipelines (9 tools)
+
+| Tool | Description |
+|---|---|
+| `get_pipeline` | Get pipeline details by identifier |
+| `list_pipelines` | List pipelines in a project |
+| `get_execution` | Get details of a specific pipeline execution |
+| `list_executions` | List pipeline executions with optional filters |
+| `fetch_execution_url` | Get the URL for a pipeline execution |
+| `list_input_sets` | List input sets for a pipeline |
+| `get_input_set` | Get details of a specific input set |
+| `get_pipeline_summary` | Get a summary of a pipeline |
+| `list_triggers` | List triggers configured for a pipeline |
+
+### Pull Requests (5 tools)
+
+| Tool | Description |
+|---|---|
+| `get_pull_request` | Get details of a specific pull request |
+| `list_pull_requests` | List pull requests in a repository |
+| `get_pull_request_checks` | Get status checks for a pull request |
+| `get_pull_request_activities` | Get activity history for a pull request |
+| `create_pull_request` | Create a new pull request |
+
+### Services (2 tools)
+
+| Tool | Description |
+|---|---|
+| `get_service` | Get details of a specific service |
+| `list_services` | List services in a project |
+
+### Environments (3 tools)
+
+| Tool | Description |
+|---|---|
+| `get_environment` | Get details of a specific environment |
+| `list_environments` | List environments in a project |
+| `move_environment_configs` | Move environment configurations |
+
+### Infrastructure (2 tools)
+
+| Tool | Description |
+|---|---|
+| `list_infrastructures` | List infrastructure definitions |
+| `move_infrastructure_configs` | Move infrastructure configurations |
+
+### Connectors (3 tools)
+
+| Tool | Description |
+|---|---|
+| `list_connector_catalogue` | List available connector types |
+| `get_connector_details` | Get details of a specific connector |
+| `list_connectors` | List connectors in a project |
+
+### Secrets (2 tools)
+
+| Tool | Description |
+|---|---|
+| `list_secrets` | List secrets in a project |
+| `get_secret` | Get details of a specific secret |
+
+### Delegates (7 tools)
+
+| Tool | Description |
+|---|---|
+| `list_delegate_tokens` | List delegate tokens |
+| `get_delegate_token` | Get details of a delegate token |
+| `create_delegate_token` | Create a new delegate token |
+| `revoke_delegate_token` | Revoke a delegate token |
+| `delete_delegate_token` | Delete a delegate token |
+
+### Repositories (2 tools)
+
+| Tool | Description |
+|---|---|
+| `get_repository` | Get details of a specific repository |
+| `list_repositories` | List repositories in a project |
+
+### Registries (5 tools)
+
+| Tool | Description |
+|---|---|
+| `get_registry` | Get details of a specific registry |
+| `list_registries` | List artifact registries |
+| `list_artifacts` | List artifacts in a registry |
+| `list_artifact_versions` | List versions of an artifact |
+| `list_artifact_files` | List files within an artifact version |
+
+### Dashboards (2 tools)
+
+| Tool | Description |
+|---|---|
+| `list_dashboards` | List available dashboards |
+| `get_dashboard_data` | Get data from a specific dashboard |
+
+### Cloud Cost Management (10 tools)
+
+| Tool | Description |
+|---|---|
+| `get_ccm_overview` | Get cloud cost management overview |
+| `list_ccm_cost_categories` | List cost categories |
+| `list_ccm_perspectives_detail` | List cost perspectives with details |
+| `get_ccm_perspective` | Get a specific cost perspective |
+| `create_ccm_perspective` | Create a new cost perspective |
+| `update_ccm_perspective` | Update an existing cost perspective |
+| `delete_ccm_perspective` | Delete a cost perspective |
+| `list_ccm_recommendations` | List cost optimization recommendations |
+| `get_ccm_anomalies_summary` | Get summary of cost anomalies |
+| `list_ccm_anomalies` | List cost anomalies |
+
+### Chaos Engineering (9 tools)
+
+| Tool | Description |
+|---|---|
+| `chaos_experiments_list` | List chaos experiments |
+| `chaos_experiment_describe` | Get details of a chaos experiment |
+| `chaos_experiment_run` | Run a chaos experiment |
+| `chaos_experiment_run_result` | Get results of a chaos experiment run |
+| `chaos_probes_list` | List chaos probes |
+| `chaos_probe_describe` | Get details of a chaos probe |
+| `chaos_create_experiment_from_template` | Create a chaos experiment from a template |
+| `chaos_experiment_template_list` | List chaos experiment templates |
+| `chaos_experiment_variables_list` | List variables for a chaos experiment |
+
+### Supply Chain Security (9 tools)
+
+| Tool | Description |
+|---|---|
+| `list_artifact_sources` | List artifact sources |
+| `list_artifacts_scs` | List artifacts per source |
+| `get_artifact_overview` | Get overview of an artifact's security posture |
+| `get_artifact_chain_of_custody` | Get chain of custody for an artifact |
+| `download_sbom` | Download SBOM for an artifact |
+| `fetch_compliance_results_for_repo_by_id` | Get compliance results for a repository |
+| `list_scs_code_repos` | List code repositories tracked for supply chain security |
+| `create_opa_policy` | Create an OPA policy for supply chain governance |
+| `get_code_repository_overview` | Get security overview of a code repository |
+
+### Security Test Orchestration (4 tools)
+
+| Tool | Description |
+|---|---|
+| `sto_all_issues_list` | Get all security issues across projects |
+| `sto_global_exemptions` | List global security exemptions |
+| `sto_exemptions_promote_and_approve` | Promote a security exemption |
+| `exemptions_reject_and_approve` | Approve or reject a security exemption |
+
+### Logs (1 tool)
+
+| Tool | Description |
+|---|---|
+| `download_execution_logs` | Download logs for a pipeline execution |
+
+### Templates (1 tool)
+
+| Tool | Description |
+|---|---|
+| `list_templates` | List pipeline and stage templates |
+
+### Internal Developer Portal (8 tools)
+
+| Tool | Description |
+|---|---|
+| `get_entity` | Get details of a catalog entity |
+| `list_entities` | List catalog entities |
+| `get_scorecard` | Get details of a scorecard |
+| `list_scorecards` | List scorecards |
+| `get_score_summary` | Get score summary for entities |
+| `get_scores` | Get detailed scores |
+| `execute_workflow` | Execute an IDP workflow |
+| `intelligent_template_search` | Search for relevant templates |
+
+### Audit Trail (1 tool)
+
+| Tool | Description |
+|---|---|
+| `list_user_audits` | List user audit events |
+
+### Feature Management & Experimentation (4 tools)
+
+| Tool | Description |
+|---|---|
+| `list_fme_workspaces` | List FME workspaces |
+| `list_fme_environments` | List FME environments |
+| `list_fme_feature_flags` | List feature flags |
+| `get_fme_feature_flag_definition` | Get definition of a feature flag |
+
+### Software Engineering Insights / DORA (7 tools)
+
+| Tool | Description |
+|---|---|
+| `sei_productivity_feature_metrics` | Get productivity and feature metrics |
+| `sei_efficiency_lead_time` | Get lead time metrics |
+| `sei_deployment_frequency` | Get deployment frequency (DORA) |
+| `sei_change_failure_rate` | Get change failure rate (DORA) |
+| `sei_mttr` | Get mean time to recovery (DORA) |
+| `sei_get_team` | Get details of a team |
+| `sei_get_teams_list` | List teams |
+
+### GitOps (8 tools)
+
+| Tool | Description |
+|---|---|
+| `list_connectors` (gitops agents) | List GitOps agents via connectors |
+| `list_repositories` (gitops) | List GitOps repositories |
+| `list_environments` (gitops) | List GitOps environments |
+| `get_environment` (gitops) | Get GitOps environment details |
+| `list_services` (gitops) | List GitOps services |
+| `get_service` (gitops) | Get GitOps service details |
+| `list_executions` (gitops) | List GitOps deployment executions |
+| `get_execution` (gitops) | Get GitOps deployment execution details |
+
+---
+
+## Steering Rules
+
+Use these rules to route requests to the correct toolset:
+
+1. **Always scope requests.** When the user mentions a pipeline, service, or environment by name, use the appropriate `list_*` tool first to resolve the identifier before calling `get_*` tools. Use `HARNESS_DEFAULT_ORG_ID` and `HARNESS_DEFAULT_PROJECT_ID` to narrow scope.
+
+2. **Prefer read-only tools first.** Start with listing and reading tools before suggesting any mutating operations (creating perspectives, running chaos experiments, creating PRs, etc.). Confirm with the user before executing write operations.
+
+3. **Use the right toolset for the domain.** Match user intent to the correct category:
+   - Build/deploy questions → **Pipelines** tools
+   - Cost questions → **CCM** tools
+   - Security questions → **SCS** or **STO** tools
+   - Reliability/resilience → **Chaos Engineering** tools
+   - Feature rollout → **FME** tools
+   - Engineering metrics/DORA → **SEI** tools
+   - Service catalog/developer experience → **IDP** tools
+   - Deployment sync/drift → **GitOps** tools
+
+4. **Chain tools for deeper context.** For pipeline failures: `list_executions` → `get_execution` → `download_execution_logs`. For security posture: `list_artifacts_scs` → `get_artifact_overview` → `fetch_compliance_results_for_repo_by_id`.
+
+5. **Summarize results clearly.** Harness API responses can be large. Extract and present the most relevant information — status, errors, timestamps, and actionable items — rather than dumping raw data.
+
+6. **Handle pagination.** Many `list_*` tools return paginated results. If the user is looking for a specific item and the first page doesn't contain it, paginate to find it.
+
 
 ---
 
@@ -612,7 +862,7 @@ HARNESS_API_KEY="..." harness-mcp-server stdio --read-only
 | Use Case | `HARNESS_TOOLSETS` Value |
 |----------|--------------------------|
 | Basic debugging | `pipelines,logs` |
-| Full platform access | `pipelines,logs,services,environments,connectors,secrets,templates,audit` |
+| Full platform access | `pipelines,logs,services,environments,connectors,secrets,templates,audit_trail` |
 | Security audit | `secrets,connectors,audit` |
 | Cost management | `ccm` |
 | All tools | `all` |
@@ -660,6 +910,211 @@ list_executions({ size: 20, page: 1 })
 - Executions: 10-20 for display, 50 for analysis
 - Services: 20-50
 - Environments: 20 (most projects have < 20 environments)
+
+---
+
+## Common Workflows — Extended Platform
+
+### Cloud Cost Management
+
+```javascript
+// Get cost overview for the last 30 days
+const overview = usePower("harness", "harness", "get_ccm_overview", {
+  "startTime": "01/01/2025", "endTime": "01/31/2025", "groupBy": "DAY"
+})
+
+// List cost perspectives
+const perspectives = usePower("harness", "harness", "list_ccm_perspectives_detail", {
+  "limit": 10, "offset": 1
+})
+
+// Get cost optimization recommendations
+const recs = usePower("harness", "harness", "list_ccm_recommendations", {
+  "limit": 10, "offset": 0, "minSaving": 100
+})
+
+// Check for cost anomalies
+const anomalies = usePower("harness", "harness", "get_ccm_anomalies_summary", {
+  "filterType": "CCMAnomaly"
+})
+```
+
+### Security Testing Orchestration
+
+```javascript
+// List all security issues across a project
+const issues = usePower("harness", "harness", "sto_all_issues_list", {
+  "accountId": "myAccount", "orgId": "default",
+  "projectId": "my_project", "severityCodes": "Critical,High",
+  "page": 0, "size": 20
+})
+
+// List pending exemptions for review
+const exemptions = usePower("harness", "harness", "sto_global_exemptions", {
+  "accountId": "myAccount", "orgId": "default",
+  "projectId": "my_project", "status": "Pending",
+  "page": 0, "pageSize": 10
+})
+```
+
+### Supply Chain Security
+
+```javascript
+// List scanned code repositories
+const repos = usePower("harness", "harness", "list_scs_code_repos", {
+  "org_id": "default", "project_id": "my_project", "size": 10
+})
+
+// Get security overview for a specific artifact
+const overview = usePower("harness", "harness", "get_artifact_overview", {
+  "org_id": "default", "project_id": "my_project",
+  "artifact_identifier": "artifact-uuid-here"
+})
+
+// Download SBOM
+const sbom = usePower("harness", "harness", "download_sbom", {
+  "org_id": "default", "project_id": "my_project",
+  "orchestration_id": "orchestration-uuid-here"
+})
+```
+
+### DORA Metrics
+
+```javascript
+// Get deployment frequency for a team
+const deployFreq = usePower("harness", "harness", "sei_deployment_frequency", {
+  "accountId": "myAccount", "teamRefId": "team-ref-id",
+  "dateStart": "2025-01-01", "dateEnd": "2025-01-31", "granularity": "WEEKLY"
+})
+
+// Get change failure rate
+const cfr = usePower("harness", "harness", "sei_change_failure_rate", {
+  "accountId": "myAccount", "teamRefId": "team-ref-id",
+  "dateStart": "2025-01-01", "dateEnd": "2025-01-31", "granularity": "WEEKLY"
+})
+
+// Get MTTR
+const mttr = usePower("harness", "harness", "sei_mttr", {
+  "accountId": "myAccount", "teamRefId": "team-ref-id",
+  "dateStart": "2025-01-01", "dateEnd": "2025-01-31", "granularity": "WEEKLY"
+})
+
+// Get lead time
+const leadTime = usePower("harness", "harness", "sei_efficiency_lead_time", {
+  "accountId": "myAccount", "teamRefId": "team-ref-id",
+  "dateStart": "2025-01-01", "dateEnd": "2025-01-31", "granularity": "WEEKLY"
+})
+```
+
+### Feature Management & Experimentation
+
+```javascript
+// List FME workspaces
+const workspaces = usePower("harness", "harness", "list_fme_workspaces", {})
+
+// List feature flags in a workspace
+const flags = usePower("harness", "harness", "list_fme_feature_flags", {
+  "ws_id": "workspace-id-here"
+})
+
+// Get definition of a specific feature flag
+const flag = usePower("harness", "harness", "get_fme_feature_flag_definition", {
+  "ws_id": "workspace-id-here",
+  "feature_flag_name": "dark-mode-v2",
+  "environment_id_or_name": "production"
+})
+```
+
+### Chaos Engineering
+
+```javascript
+// List available chaos experiments
+const experiments = usePower("harness", "harness", "chaos_experiments_list", {
+  "org_id": "default", "project_id": "my_project", "page": 0, "size": 10
+})
+
+// Get details of a specific experiment
+const experiment = usePower("harness", "harness", "chaos_experiment_describe", {
+  "org_id": "default", "project_id": "my_project"
+})
+
+// Run a chaos experiment (write operation — confirm first!)
+// Show experiment details, estimated blast radius, confirm with user before running
+const result = usePower("harness", "harness", "chaos_experiment_run", {
+  "org_id": "default", "project_id": "my_project"
+})
+
+// Get results of the last run
+const runResult = usePower("harness", "harness", "chaos_experiment_run_result", {
+  "org_id": "default", "project_id": "my_project"
+})
+```
+
+### Internal Developer Portal
+
+```javascript
+// List catalog entities
+const entities = usePower("harness", "harness", "list_entities", {
+  "kind": "component", "page": 0, "size": 20, "scope_level": "ALL"
+})
+
+// Get a specific entity
+const entity = usePower("harness", "harness", "get_entity", {
+  "entity_id": "payments-service", "kind": "component"
+})
+
+// Get scorecard for a service
+const scores = usePower("harness", "harness", "get_scores", {
+  "entity_identifier": "payments-service"
+})
+```
+
+---
+
+## Onboarding
+
+### Quick Toolset Reference
+
+If you only need a subset of capabilities, set `HARNESS_TOOLSETS` to load specific toolsets and improve performance:
+
+| Use Case | `HARNESS_TOOLSETS` |
+|---|---|
+| CI/CD debugging only | `pipelines,logs` |
+| Full CI/CD platform | `pipelines,logs,services,environments,connectors,secrets,templates,audit_trail` |
+| Security & compliance | `scs,sto,audit_trail` |
+| Cloud cost optimization | `ccm` |
+| Chaos engineering | `chaos` |
+| Feature management | `fme` |
+| DORA metrics | `sei` |
+| GitOps | `gitops` |
+| Developer experience | `idp` |
+| Everything | `all` |
+
+**Available toolset names:** `default`, `pipelines`, `pull_requests`, `services`, `environments`, `infrastructure`, `connectors`, `secrets`, `delegate_tokens`, `delegate`, `repositories`, `registries`, `dashboards`, `ccm`, `chaos`, `scs`, `sto`, `logs`, `templates`, `idp`, `audit_trail`, `fme`, `sei`, `gitops`
+
+### Example Prompts by Domain
+
+**CI/CD:**
+> "Why did the deploy-production pipeline fail? Show me the logs."
+
+**Cloud Costs:**
+> "What are our top cloud cost drivers this month? Are there any anomalies?"
+
+**DORA Metrics:**
+> "Show me the deployment frequency and change failure rate for the backend team."
+
+**Security:**
+> "What critical vulnerabilities exist in our latest Docker image? Show remediation steps."
+
+**Feature Flags:**
+> "List all feature flags in the production environment. What's the status of dark-mode-v2?"
+
+**Chaos Engineering:**
+> "List available chaos experiments. What were the results of the last pod-kill run?"
+
+**Developer Portal:**
+> "Show me the scorecard for the payments service. What's its maturity level?"
+
 
 ---
 

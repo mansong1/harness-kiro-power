@@ -1,408 +1,131 @@
-# Harness CI/CD Platform Power for Kiro
+# harness-kiro-power
 
-[![Kiro Power](https://img.shields.io/badge/Kiro-Power-blue)](https://kiro.dev/docs/powers/)
-[![Harness MCP Server](https://img.shields.io/badge/Harness-MCP%20Server-orange)](https://github.com/harness/mcp-server)
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+A [Kiro Power](https://kiro.dev/docs/powers/) that connects your AI agent to the full **Harness platform** — CI/CD, Cloud Cost Management, Chaos Engineering, Feature Flags, Security Testing, DORA Metrics, GitOps, Internal Developer Portal, and more — all via natural language.
 
-> A production-ready [Kiro Power](https://kiro.dev/docs/powers/) that connects to the [Harness MCP server](https://github.com/harness/mcp-server), enabling natural-language CI/CD operations — debug failures, trigger pipelines, promote builds, and generate release notes — directly inside Kiro.
+## Features
 
----
+- **CI/CD Pipelines** — List, inspect, trigger, promote, and debug pipelines and executions
+- **Cloud Cost Management** — Analyze cost overviews, perspectives, recommendations, and anomalies
+- **Security Testing Orchestration** — Surface critical vulnerabilities, manage exemptions
+- **Supply Chain Security** — View SBOMs, artifact chain-of-custody, compliance results, OPA policies
+- **Chaos Engineering** — Browse and run chaos experiments, analyze blast radius and results
+- **Feature Management & Experimentation** — Inspect feature flag definitions across environments
+- **DORA Metrics** — Track deployment frequency, lead time, change failure rate, and MTTR per team
+- **GitOps** — Monitor deployment sync status and resource drift
+- **Internal Developer Portal** — Query service catalog, scorecards, and IDP workflows
+- **Failure Debugging** — Download logs and generate root-cause summaries for failing pipelines
+- **Deployment Promotion** — Promote builds between environments with approval gate awareness
+- **Release Notes** — Generate structured release summaries from successful executions
 
-## Overview
+## Requirements
 
-This Power gives your Kiro AI agent full access to the Harness platform. Just describe what you want in plain English:
+- A [Harness](https://app.harness.io) account with an active project
+- A Harness Personal Access Token (PAT) — see [POWER.md](./POWER.md) for minimum scopes
+- [Kiro IDE](https://kiro.dev) (or compatible MCP client)
+- Docker (for the Docker-based MCP server variant) **or** the `harness-mcp-server` binary
 
-| You say | What happens |
-|---------|-------------|
-| *"Show me my latest pipeline executions"* | Lists last N executions with status, duration, and clickable links |
-| *"Why did the last deployment fail?"* | Fetches execution graph + logs → synthesizes root cause + next steps |
-| *"Trigger build-api pipeline with tag v2.3.2"* | Dry-run preview with validation; generates trigger command on `confirm: true` |
-| *"Promote staging to production"* | Detects approval gates; builds promotion plan; trigger on `confirm: true` |
-| *"Generate release notes for the last release"* | Extracts artifacts + services + environments from execution data |
+## Installation
 
-**Safe by default:** All write operations require explicit `confirm: true`. Secrets and API tokens are never printed.
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/mansong1/harness-kiro-power.git
+   cd harness-kiro-power
+   ```
 
----
+2. Set your environment variables:
+   ```bash
+   export HARNESS_API_KEY="pat.xxxx.yyyy.zzzz"
+   export HARNESS_ACCOUNT_ID="your-account-id"
+   export HARNESS_DEFAULT_ORG_ID="default"
+   export HARNESS_DEFAULT_PROJECT_ID="my_project"
+   ```
 
-## What's Included
+3. Copy or reference `mcp.json` in your Kiro project — it configures the Harness MCP server with `all` toolsets enabled.
 
-```
-harness-kiro-power/
-├── POWER.md                    # Main steering file: tool discovery, intents, examples
-├── mcp.json                    # Harness MCP server configuration (Docker)
-└── steering/
-    ├── workflows.md            # Detailed step-by-step workflow guides
-    ├── testing.md              # Complete test plan (unit/contract/integration/negative)
-    └── troubleshooting.md      # Error reference: auth, permissions, logs, Docker
-```
+4. Open Kiro and start using the Power. See [POWER.md](./POWER.md) for example prompts and workflows.
 
----
+## Configuration
 
-## Quick Start
-
-### Prerequisites
-
-- [Docker](https://docker.com) (recommended) — or the [Harness MCP Server binary](https://github.com/harness/mcp-server/releases)
-- A [Harness account](https://app.harness.io) (free tier available)
-- A Harness Personal Access Token (PAT)
-
-### 1. Get a Harness API Key
-
-1. Log in to [app.harness.io](https://app.harness.io)
-2. Click your avatar → **My Profile → My API Keys → + API Key**
-3. Add a **Personal Access Token** — minimum scopes for read-only:
-   - `core_pipeline_view` + `core_execution_view` + `core_service_view` + `core_environment_view`
-4. Copy the token (shown only once)
-
-### 2. Set Environment Variables
-
-```bash
-export HARNESS_API_KEY="pat.xxxx.yyyy.zzzz"
-export HARNESS_DEFAULT_ORG_ID="default"              # your org identifier
-export HARNESS_DEFAULT_PROJECT_ID="my_project"       # your project identifier
-```
-
-### 3. Install in Kiro
-
-Install from a local directory path in Kiro, or reference this repository directly:
-
-```
-https://github.com/mansong1/harness-kiro-power
-```
-
-Kiro will automatically load `POWER.md` and `mcp.json`, launch the Docker container, and register all Harness tools.
-
-### 4. Start Using It
-
-In Kiro, just type naturally:
-
-```
-"Show me the last 10 pipeline executions for my project"
-
-"Why did the last deploy fail? Give me a root cause analysis."
-
-"Trigger the deploy-staging pipeline with image tag v2.3.2"
-
-"Generate release notes for the last successful production build"
-```
-
----
-
-## Supported Intents
-
-### Intent A — List Pipeline Executions
-```
-"show me recent pipelines"
-"list executions for org/project"
-"what pipeline ran in the last hour"
-```
-→ Returns a table of executions sorted by recency, with status, duration, triggered-by, and clickable Harness UI links.
-
-### Intent B — Debug a Failure
-```
-"why did the last deployment fail"
-"explain the last pipeline failure"  
-"debug build-api execution abc123"
-```
-→ Multi-step: `list_executions(FAILED)` → `get_execution` (extract failing stage/step) → `download_execution_logs` → synthesize root cause with evidence and next actions.
-
-### Intent C — Trigger a Pipeline
-```
-"trigger pipeline deploy-staging"
-"run build-api with inputs image_tag=v2.3.2"
-"start the nightly build"
-```
-→ Always shows a dry-run preview first. Generates the trigger command when `confirm: true` is provided. The Harness MCP server is read-focused; this power generates the exact REST command for execution.
-
-### Intent D — Promote a Build
-```
-"promote staging to production"
-"promote build v2.3.2 from QA to prod"
-```
-→ Inspects environments, finds last successful execution, detects approval gates in the production pipeline, presents a promotion plan. Requires `confirm: true` to generate the trigger command.
-
-### Intent E — Generate Release Notes
-```
-"generate release notes"
-"what shipped in the last release"
-"create a changelog from the last build"
-```
-→ Extracts artifacts, service versions, environments from the last successful execution. Clearly notes limitations (commit history, PR links require SCM connector configuration).
-
----
-
-## Configuration Reference
-
-### mcp.json (Docker — recommended)
+The included [`mcp.json`](./mcp.json) is ready to use. It starts the Harness MCP server via Docker with all toolsets enabled:
 
 ```json
 {
   "mcpServers": {
     "harness": {
       "command": "docker",
-      "args": [
-        "run", "-i", "--rm",
+      "args": ["run", "--rm", "-i",
         "-e", "HARNESS_API_KEY",
-        "-e", "HARNESS_BASE_URL",
+        "-e", "HARNESS_ACCOUNT_ID",
         "-e", "HARNESS_DEFAULT_ORG_ID",
         "-e", "HARNESS_DEFAULT_PROJECT_ID",
-        "-e", "HARNESS_TOOLSETS",
-        "-e", "HARNESS_READ_ONLY",
-        "harness/mcp-server:latest",
-        "stdio"
-      ],
-      "env": {
-        "HARNESS_API_KEY": "HARNESS_API_KEY",
-        "HARNESS_BASE_URL": "https://app.harness.io",
-        "HARNESS_DEFAULT_ORG_ID": "HARNESS_DEFAULT_ORG_ID",
-        "HARNESS_DEFAULT_PROJECT_ID": "HARNESS_DEFAULT_PROJECT_ID",
-        "HARNESS_TOOLSETS": "pipelines,logs,services,environments,connectors,secrets,templates,audit",
-        "HARNESS_READ_ONLY": "false"
-      }
+        "harness/mcp-server:latest", "stdio",
+        "--toolsets", "all"
+      ]
     }
   }
 }
 ```
 
-### Alternative: Local Binary
+### Selective Toolsets
 
-```json
-{
-  "mcpServers": {
-    "harness": {
-      "command": "/usr/local/bin/harness-mcp-server",
-      "args": ["stdio", "--toolsets=pipelines,logs,services,environments,connectors,secrets,templates,audit"],
-      "env": {
-        "HARNESS_API_KEY": "HARNESS_API_KEY",
-        "HARNESS_BASE_URL": "https://app.harness.io",
-        "HARNESS_DEFAULT_ORG_ID": "HARNESS_DEFAULT_ORG_ID",
-        "HARNESS_DEFAULT_PROJECT_ID": "HARNESS_DEFAULT_PROJECT_ID"
-      }
-    }
-  }
-}
+If you only need specific capabilities, replace `all` with a comma-separated list:
+
+| Use Case | `--toolsets` value |
+|---|---|
+| CI/CD debugging | `pipelines,logs` |
+| Full CI/CD | `pipelines,logs,services,environments,connectors,secrets,templates,audit_trail` |
+| Security audit | `scs,sto,audit_trail` |
+| Cloud costs | `ccm` |
+| Chaos engineering | `chaos` |
+| Feature flags | `fme` |
+| DORA metrics | `sei` |
+| Developer portal | `idp` |
+| All tools | `all` |
+
+**Available toolsets:** `default`, `pipelines`, `pull_requests`, `services`, `environments`, `infrastructure`, `connectors`, `secrets`, `delegate_tokens`, `repositories`, `registries`, `dashboards`, `ccm`, `chaos`, `scs`, `sto`, `logs`, `templates`, `idp`, `audit_trail`, `fme`, `sei`, `gitops`
+
+## Example Prompts
+
+```
+"Why did the deploy-production pipeline fail? Show me the logs."
+"What are our top cloud cost drivers this month? Any anomalies?"
+"Show DORA metrics for the backend team over the last 30 days."
+"What critical vulnerabilities exist in our latest Docker image?"
+"List all feature flags in production. What's the rollout status of dark-mode-v2?"
+"Run chaos experiment pod-kill-payments and show me the results."
+"Show me the IDP scorecard for the payments service."
+"Generate release notes for the last successful production deployment."
 ```
 
-### Alternative: Read-Only Mode (recommended for debugging)
+## Documentation
 
-```json
-{
-  "mcpServers": {
-    "harness": {
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "-e", "HARNESS_API_KEY", "-e", "HARNESS_DEFAULT_ORG_ID", "-e", "HARNESS_DEFAULT_PROJECT_ID", "harness/mcp-server:latest", "stdio", "--read-only"],
-      "env": {
-        "HARNESS_API_KEY": "HARNESS_API_KEY",
-        "HARNESS_DEFAULT_ORG_ID": "HARNESS_DEFAULT_ORG_ID",
-        "HARNESS_DEFAULT_PROJECT_ID": "HARNESS_DEFAULT_PROJECT_ID"
-      }
-    }
-  }
-}
-```
+- **[POWER.md](./POWER.md)** — Full platform guide: capabilities, all 24 toolsets, intents, multi-step workflows, safety guardrails, onboarding
+- **[steering/workflows.md](./steering/workflows.md)** — Step-by-step workflow guides
+- **[steering/testing.md](./steering/testing.md)** — Test plans and sample cases
+- **[steering/troubleshooting.md](./steering/troubleshooting.md)** — Auth failures, rate limits, pagination
 
-### Log Downloads (requires volume mount)
+## Use Cases
 
-```json
-{
-  "mcpServers": {
-    "harness": {
-      "command": "docker",
-      "args": [
-        "run", "-i", "--rm",
-        "-v", "/tmp/harness-logs:/harness-logs",
-        "-e", "HARNESS_API_KEY",
-        "-e", "HARNESS_DEFAULT_ORG_ID",
-        "-e", "HARNESS_DEFAULT_PROJECT_ID",
-        "-e", "HARNESS_TOOLSETS",
-        "harness/mcp-server:latest",
-        "stdio",
-        "--output-dir=/harness-logs"
-      ],
-      "env": {
-        "HARNESS_API_KEY": "HARNESS_API_KEY",
-        "HARNESS_DEFAULT_ORG_ID": "HARNESS_DEFAULT_ORG_ID",
-        "HARNESS_DEFAULT_PROJECT_ID": "HARNESS_DEFAULT_PROJECT_ID",
-        "HARNESS_TOOLSETS": "pipelines,logs,services,environments"
-      }
-    }
-  }
-}
-```
+| Persona | How They Use This Power |
+|---|---|
+| **Platform Engineer** | Debug pipeline failures, inspect infrastructure, manage connectors |
+| **DevOps Lead** | Track DORA metrics, review deployment frequency, monitor change failure rate |
+| **Security Engineer** | Review SBOMs, triage critical vulnerabilities, manage exemptions |
+| **FinOps Analyst** | Analyze cloud spend, identify anomalies, act on cost recommendations |
+| **SRE** | Run chaos experiments, review reliability results, monitor GitOps sync status |
+| **Product Manager** | Check feature flag status, review release notes, track environment promotions |
+| **Developer** | Debug failing pipelines, review PR checks, check IDP scorecard |
 
----
-
-## Environment Variables
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `HARNESS_API_KEY` | ✅ Yes | Personal Access Token from Harness |
-| `HARNESS_BASE_URL` | No | Base URL (default: `https://app.harness.io`) |
-| `HARNESS_DEFAULT_ORG_ID` | Recommended | Lock to a specific organization |
-| `HARNESS_DEFAULT_PROJECT_ID` | Recommended | Lock to a specific project |
-| `HARNESS_TOOLSETS` | No | Comma-separated toolset list (default: `default`) |
-| `HARNESS_READ_ONLY` | No | Set `true` to block all write operations |
-
-### Recommended Toolsets
-
-| Use Case | `HARNESS_TOOLSETS` |
-|----------|-------------------|
-| Read-only debugging (Intents A + B) | `pipelines,logs` |
-| Full platform (all 5 intents) | `pipelines,logs,services,environments,connectors,secrets,templates,audit` |
-| Security audit | `secrets,connectors,audit` |
-| Cost optimization | `ccm` |
-| All toolsets | `all` |
-
----
-
-## Security & Governance
-
-### Least-Privilege Token Configuration
-
-| Intent | Minimum Token Scopes |
-|--------|---------------------|
-| List + Debug (read-only) | `core_pipeline_view`, `core_execution_view`, `core_service_view`, `core_environment_view` |
-| Trigger pipelines | + `core_pipeline_execute` |
-| Connectors + secrets inspection | + `core_connector_view`, `core_secret_view` |
-
-**Best practice:** Use project-scoped tokens, not account-level tokens. Set both `HARNESS_DEFAULT_ORG_ID` and `HARNESS_DEFAULT_PROJECT_ID` to prevent accidental cross-project access.
-
-### Safety Guardrails
-
-- **Secrets never exposed**: `list_secrets` / `get_secret` return metadata only — no secret values
-- **API key never printed**: The agent filters `HARNESS_API_KEY` from all outputs
-- **Write confirmation required**: Trigger, promote, approve, delete all require `confirm: true`
-- **Read-only mode**: Add `--read-only` flag to completely block write operations
-- **Scope lock**: Set default org/project to prevent accidental cross-project operations
-- **Audit trail**: Every action is logged in the Harness audit trail
-
----
-
-## Steering Files
-
-The Power includes three steering files loaded on-demand:
-
-| File | Contents | When to Load |
-|------|----------|-------------|
-| `steering/workflows.md` | Step-by-step multi-stage workflow guides for all 5 intents | Complex workflows, multi-step operations |
-| `steering/testing.md` | Full test plan: unit, contract, integration, negative tests | Building/testing the power itself |
-| `steering/troubleshooting.md` | Error diagnosis: auth, permissions, logs, Docker, rate limits | Something isn't working |
-
----
-
-## Available Harness MCP Tools
-
-This power enables these toolsets (all from the [Harness MCP Server](https://github.com/harness/mcp-server)):
-
-### Pipelines
-`list_pipelines` · `get_pipeline` · `get_pipeline_summary` · `list_executions` · `get_execution` · `fetch_execution_url` · `list_input_sets` · `get_input_set` · `list_triggers`
-
-### Logs
-`download_execution_logs`
-
-### Services & Environments
-`list_services` · `get_service` · `list_environments` · `get_environment` · `list_infrastructures`
-
-### Connectors & Secrets
-`list_connectors` · `get_connector_details` · `list_secrets` · `get_secret`
-
-### Templates & Audit
-`list_templates` · `list_user_audits`
-
----
-
-## Testing
-
-See `steering/testing.md` for the complete test plan. Quick start:
+## Development
 
 ```bash
-# Unit + contract tests (no credentials needed)
-npm test -- --testPathPattern="unit|contract"
-
-# Integration tests (requires sandbox Harness account)
-export HARNESS_TEST_API_KEY="pat.xxxx.yyyy.zzzz"
-export HARNESS_TEST_ORG_ID="default"
-export HARNESS_TEST_PROJECT_ID="harness_power_test"
-npm test -- --testPathPattern=integration
-
-# Negative tests
-npm test -- --testPathPattern=negative
+npm install
+npm test           # run all tests
+npm run test:unit  # unit tests only
 ```
-
-### Manual Smoke Test
-
-```bash
-# Verify MCP server connectivity
-docker run -i --rm \
-  -e HARNESS_API_KEY="$HARNESS_API_KEY" \
-  harness/mcp-server stdio
-
-# Inspect available tools with MCP Inspector
-npx @modelcontextprotocol/inspector \
-  docker run -i --rm \
-  -e HARNESS_API_KEY="$HARNESS_API_KEY" \
-  harness/mcp-server stdio
-```
-
----
-
-## Troubleshooting
-
-| Problem | Solution |
-|---------|----------|
-| `401 Unauthorized` | Regenerate PAT at My Profile → My API Keys |
-| `403 Forbidden` | Add missing scope to token |
-| `Tool not found` | Add required toolset to `HARNESS_TOOLSETS` |
-| Empty executions | Check org_id/project_id spelling; remove status filter |
-| Logs not found | Add volume mount to Docker config; set `--output-dir` |
-| Docker exits immediately | Verify `HARNESS_API_KEY` is set and non-empty |
-
-Full details: `steering/troubleshooting.md`
-
----
-
-## Project Structure (Kiro Power Format)
-
-This repository follows the [Kiro Power conventions](https://kiro.dev/docs/powers/):
-
-- **`POWER.md`** — Required. Frontmatter metadata + all primary documentation
-- **`mcp.json`** — Required for Guided MCP Powers. MCP server connection config
-- **`steering/`** — Optional. Dynamic content loaded on-demand by the agent
-
-### Power Frontmatter
-```yaml
-name: "harness"
-displayName: "Harness CI/CD Platform"
-description: "Manage Harness pipelines, deployments, services, and environments..."
-keywords: ["harness", "ci/cd", "pipeline", "deployment", "devops", ...]
-author: "Harness"
-```
-
----
-
-## Contributing
-
-Contributions welcome! To extend this Power:
-
-1. **Add a new intent**: Add to `POWER.md` under "Supported Intents" with multi-step flow + output format
-2. **Add a new workflow**: Extend `steering/workflows.md` with detailed steps
-3. **Add test cases**: Add to `steering/testing.md` under the relevant section
-4. **Report issues**: Open a GitHub issue with the MCP tool that failed + error message
-
----
-
-## Related Resources
-
-- [Harness MCP Server](https://github.com/harness/mcp-server) — Official MCP server source
-- [Harness Developer Docs](https://developer.harness.io/docs) — Platform documentation
-- [Kiro Powers Documentation](https://kiro.dev/docs/powers/) — How Powers work
-- [MCP Inspector](https://github.com/modelcontextprotocol/inspector) — Debug MCP tool calls
-- [Harness Community Slack](https://harnesscommunity.slack.com) — Community support
-
----
 
 ## License
 
-Apache 2.0 — See [LICENSE](LICENSE) for details.
+Apache 2.0 — see [LICENSE](./LICENSE)
 
-The [Harness MCP Server](https://github.com/harness/mcp-server) is also licensed under Apache 2.0.
+**Source:** [harness/mcp-server](https://github.com/harness/mcp-server)
