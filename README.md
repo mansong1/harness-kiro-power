@@ -2,6 +2,27 @@
 
 A [Kiro Power](https://kiro.dev/docs/powers/) that connects your AI agent to the full **Harness platform** — CI/CD, Cloud Cost Management, Chaos Engineering, Feature Flags, Security Testing, DORA Metrics, GitOps, Internal Developer Portal, and more — all via natural language.
 
+## What is a Kiro Power?
+
+> *"Powers bundle MCP servers, steering files, and hooks into unified packages that agents load only when needed — turning them into instant experts."*
+> — [Kiro](https://www.youtube.com/watch?v=M46PSAXpMfA)
+
+When tackling specialised tasks, AI agents need targeted context. Adding multiple MCP servers and documentation all at once creates **context overload**, slowing agents down and producing unfocused answers.
+
+Kiro Powers solve this by packaging everything an agent needs for a specific domain:
+
+| Component | What it does |
+|---|---|
+| **MCP Server** | Provides the tools (API calls, data fetching) |
+| **Steering files** | Give the agent step-by-step workflow knowledge |
+| **Hooks** | Automate actions at key lifecycle points |
+
+The result: **no context overload, faster responses, expertise on demand.**
+
+Browse and install Powers from the [Kiro Powers directory →](http://spr.ly/605672zxj)
+
+---
+
 ## Features
 
 - **CI/CD Pipelines** — List, inspect, trigger, promote, and debug pipelines and executions
@@ -100,9 +121,17 @@ If you only need specific capabilities, replace `all` with a comma-separated lis
 ## Documentation
 
 - **[POWER.md](./POWER.md)** — Full platform guide: capabilities, all 24 toolsets, intents, multi-step workflows, safety guardrails, onboarding
-- **[steering/workflows.md](./steering/workflows.md)** — Step-by-step workflow guides
-- **[steering/testing.md](./steering/testing.md)** — Test plans and sample cases
-- **[steering/troubleshooting.md](./steering/troubleshooting.md)** — Auth failures, rate limits, pagination
+
+### Steering Files
+
+The steering files give Kiro step-by-step workflow knowledge for Harness — loaded automatically as context. They are split by domain to keep the agent focused:
+
+| File | Contents |
+|---|---|
+| [steering/rules.md](./steering/rules.md) | 6 universal rules + output template — always relevant |
+| [steering/workflows.md](./steering/workflows.md) | CI/CD workflows: pre-flight, debug, trigger, promote, release notes, audit, inventory |
+| [steering/platform.md](./steering/platform.md) | Platform workflows: CCM, SCS+STO, DORA, FME, Chaos, GitOps, IDP |
+| [steering/troubleshooting.md](./steering/troubleshooting.md) | Auth failures, rate limits, pagination fixes |
 
 ## Use Cases
 
