@@ -269,12 +269,12 @@ In Kiro, just type naturally:
 
 ### Safety Guardrails
 
-- 🔒 **Secrets never exposed**: `list_secrets` / `get_secret` return metadata only — no secret values
-- 🔒 **API key never printed**: The agent filters `HARNESS_API_KEY` from all outputs
-- ⚠️ **Write confirmation required**: Trigger, promote, approve, delete all require `confirm: true`
-- 🛡️ **Read-only mode**: Add `--read-only` flag to completely block write operations
-- 🛡️ **Scope lock**: Set default org/project to prevent accidental cross-project operations
-- 📋 **Audit trail**: Every action is logged in the Harness audit trail
+- **Secrets never exposed**: `list_secrets` / `get_secret` return metadata only — no secret values
+- **API key never printed**: The agent filters `HARNESS_API_KEY` from all outputs
+- **Write confirmation required**: Trigger, promote, approve, delete all require `confirm: true`
+- **Read-only mode**: Add `--read-only` flag to completely block write operations
+- **Scope lock**: Set default org/project to prevent accidental cross-project operations
+- **Audit trail**: Every action is logged in the Harness audit trail
 
 ---
 
