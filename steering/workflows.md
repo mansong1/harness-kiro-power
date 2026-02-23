@@ -20,11 +20,16 @@ STEP 1: Call list_pipelines(size=1) to verify connectivity
   → If success: Continue to workflow
 
 STEP 2: Check which tools are available by attempting list_executions(size=1)
-  → If tool_not_found: Add "pipelines" to HARNESS_TOOLSETS
+  → If tool_not_found:
+      - For repo Docker profiles: update `--toolsets` in mcp json args
+      - For binary runs: add "pipelines" to HARNESS_TOOLSETS
   → If success: Execution tools confirmed
 
 STEP 3: Optionally check download_execution_logs availability
-  → If tool_not_found: Add "logs" to HARNESS_TOOLSETS; warn user
+  → If tool_not_found:
+      - For repo Docker profiles: add `logs` to `--toolsets`
+      - For binary runs: add "logs" to HARNESS_TOOLSETS
+      - Warn user if logs toolset is intentionally disabled
   → Log downloads require: --output-dir flag on binary, or volume mount on Docker
 
 STEP 4: Confirm scope
@@ -174,7 +179,7 @@ Build structured output:
 
 **User says:** "Trigger pipeline build-api", "Run deploy-staging with tag v2.3.2"
 
-⚠️ This workflow requires `confirm: true` for any real trigger action.
+Warning: this workflow requires `confirm: true` for any real trigger action.
 
 ### Steps
 
@@ -221,7 +226,7 @@ Present full preview before any action
 **Step 4 — Provide trigger command (requires confirm=true)**
 ```
 IF confirm != true:
-  → Stop here. Show: "⚠️ Add confirm=true to proceed with the actual trigger"
+  → Stop here. Show: "Add confirm=true to proceed with the actual trigger"
   
 IF confirm == true:
   → Generate the exact curl command:
@@ -241,7 +246,7 @@ IF confirm == true:
 
 **User says:** "Promote staging to production", "Promote v2.3.2 from QA to prod"
 
-⚠️ Promotion means triggering a pipeline that deploys to a higher environment. Requires `confirm: true`.
+Warning: promotion means triggering a pipeline that deploys to a higher environment and requires `confirm: true`.
 
 ### Steps
 

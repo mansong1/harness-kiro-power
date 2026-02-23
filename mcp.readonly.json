@@ -18,7 +18,7 @@
         "stdio",
         "--read-only",
         "--toolsets",
-        "pipelines,logs"
+        "all"
       ],
       "env": {
         "HARNESS_API_KEY": "${HARNESS_API_KEY}",

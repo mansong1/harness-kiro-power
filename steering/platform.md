@@ -33,7 +33,7 @@ STEP 4: Find optimization opportunities
   → Prioritize by highest saving first
 
 STEP 5: Check for anomalies
-  get_ccm_anomalies_summary(filterType: "CCMAnomalyFilter")
+  get_ccm_anomalies_summary(filterType: "Anomaly")
   → List any unexpected cost spikes with affected service and amount
 
 STEP 6: Summarize
@@ -60,37 +60,41 @@ create_ccm_perspective(name: ..., view_rules: [...])
 
 ```
 STEP 1: List tracked artifact sources
-  list_artifacts_scs(search_term: <image_name_if_known>)
-  → Find the artifact; note its sourceId/orchestration_id
+  scs_list_artifact_sources(search_term: <image_name_if_known>)
+  → Identify the relevant source_id
 
-STEP 2: Get vulnerability overview
-  get_artifact_overview(artifact_identifier: ...)
+STEP 2: List artifacts in the selected source
+  scs_list_artifacts_per_source(source: ...)
+  → Find artifact_identifier and orchestration_id for the target image/repo
+
+STEP 3: Get vulnerability overview
+  scs_get_artifact_overview(artifact_identifier: ...)
   → Extract: critical/high/medium/low CVE counts, license violations, policy violations
 
-STEP 3: Drill into vulnerable components
-  get_artifact_component_view(artifact_identifier: ...)
+STEP 4: Drill into vulnerable components
+  scs_get_artifact_component_view(artifact_identifier: ...)
   → Table: Component | Version | CVE | Severity | Fix Version
 
-STEP 4: Get remediation guidance
-  get_artifact_component_remediation(artifact_identifier: ...)
+STEP 5: Get remediation guidance
+  scs_get_artifact_component_remediation(artifact_identifier: ...)
   → For each critical/high CVE: what to upgrade to, patch available?
 
-STEP 5: Check compliance
-  fetch_compliance_results_for_repo_by_id(artifact_identifier: ...)
+STEP 6: Check compliance
+  scs_fetch_compliance_results_for_repo_by_id(artifact_identifier: ...)
   → Show: PASS/FAIL for CIS, OWASP, SLSA checks
 
-STEP 6: Download SBOM if requested
-  download_sbom(orchestration_id: ...)
+STEP 7: Download SBOM if requested
+  scs_download_sbom(orchestration_id: ...)
   → Returns full CycloneDX/SPDX bill of materials
 
-STEP 7: Review STO issues (cross-project)
-  sto_all_issues_list(orgId: ..., projectId: ..., severityCodes: "Critical,High")
+STEP 8: Review STO issues (cross-project)
+  get_all_security_issues(orgId: ..., projectId: ..., severityCodes: "Critical,High")
   → Table: Issue | Severity | Tool | Target | Exemption Status
 ```
 
 **Chain of custody (for supply chain audit):**
 ```
-get_artifact_chain_of_custody(artifact_identifier: ...)
+scs_get_artifact_chain_of_custody(artifact_identifier: ...)
 → Chronological list: SLSA provenance, SBOM generation, scan events, policy checks
 ```
 
@@ -181,7 +185,7 @@ STEP 5: Summarize
 
 **Required toolsets:** `chaos`
 
-⚠️ `chaos_experiment_run` requires explicit user confirmation before executing.
+Warning: `chaos_experiment_run` requires explicit user confirmation before executing.
 
 ```
 STEP 1: Browse existing experiments

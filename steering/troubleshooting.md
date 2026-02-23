@@ -152,7 +152,7 @@ list_pipelines(
 - `list_services` not available
 - MCP client says tool doesn't exist
 
-**Cause:** The required toolset is not enabled in `HARNESS_TOOLSETS`.
+**Cause:** The required toolset is not enabled. With this repo's Docker profiles, toolsets come from the server args (`--toolsets ...`). For direct binary runs, toolsets come from `HARNESS_TOOLSETS`.
 
 **Default toolset** only includes: `list_pipelines`, `get_pipeline`, `get_execution`, `list_executions`, `fetch_execution_url`, `list_dashboards`, `get_dashboard_data`, `list_connectors`, `get_connector_details`, `list_connector_catalogue`
 
@@ -170,17 +170,16 @@ list_pipelines(
 | `list_user_audits` | `audit` |
 | All tools | `all` |
 
-**Fix mcp.json:**
-```json
-{
-  "mcpServers": {
-    "harness": {
-      "env": {
-        "HARNESS_TOOLSETS": "pipelines,logs,services,environments,connectors,secrets,templates,audit"
-      }
-    }
-  }
-}
+**Fix mcp.json (Docker profile in this repo):**
+```text
+Edit the `mcpServers.harness.args` array and set:
+  "--toolsets",
+  "pipelines,logs,services,environments,connectors,secrets,templates,audit"
+```
+
+**Alternative (binary run):**
+```bash
+export HARNESS_TOOLSETS="pipelines,logs,services,environments,connectors,secrets,templates,audit"
 ```
 
 **Restart Kiro** after changing mcp.json for the new toolsets to load.
@@ -373,7 +372,7 @@ export HARNESS_OUTPUT_DIR=/tmp/harness-logs
    Fix: Verify: echo $HARNESS_API_KEY
    
 3. Wrong image name:
-   Fix: Use "harness/mcp-server:latest" (check Docker Hub for correct tag)
+   Fix: Use a pinned tag such as "harness/mcp-server:latest"
    
 4. Missing --rm flag causes port conflicts on restart:
    Fix: Always use -i --rm
@@ -391,11 +390,8 @@ docker run -i --rm \
 ### Docker image not found
 
 ```bash
-# Pull latest image
+# Pull a pinned image
 docker pull harness/mcp-server:latest
-
-# Or use a specific version
-docker pull harness/mcp-server:v1.0.0-beta.16
 ```
 
 ---
@@ -463,7 +459,7 @@ Quick reference to avoid confusion:
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `get_ccm_overview` returns empty | No cloud connector configured | Add "ccm" to `HARNESS_TOOLSETS`; verify AWS/GCP/Azure connector exists |
+| `get_ccm_overview` returns empty | No cloud connector configured | Add `ccm` to `--toolsets` (Docker profiles) or `HARNESS_TOOLSETS` (binary); verify AWS/GCP/Azure connector exists |
 | Perspectives return no cost data | Cloud connector not yet synced | Wait 24h after first connector setup; costs sync daily |
 | `list_ccm_recommendations` is empty | Feature not licensed or no data yet | Verify CCM license; ensure cloud connector has been active ≥7 days |
 | Anomaly detection not firing | Insufficient baseline data | Anomaly detection needs 30+ days of cost history |
@@ -472,8 +468,8 @@ Quick reference to avoid confusion:
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `list_artifacts_scs` returns empty | No SBOM orchestration configured | Set up SCS pipeline stage; add "scs" to toolsets |
-| `download_sbom` fails | No orchestration for this artifact | Run an SBOM generation pipeline first |
+| `scs_list_artifact_sources` returns empty | No SBOM orchestration configured | Set up SCS pipeline stage; add `scs` to `--toolsets` (Docker profiles) or `HARNESS_TOOLSETS` (binary) |
+| `scs_download_sbom` fails | No orchestration for this artifact | Run an SBOM generation pipeline first |
 | STO issues list is empty | No scan pipelines configured | Add STO scanner step to CI pipeline |
 | Compliance checks all UNKNOWN | Compliance framework not assigned | Assign CIS/OWASP framework in SCS settings |
 
@@ -484,7 +480,7 @@ Quick reference to avoid confusion:
 | `chaos_experiments_list` is empty | No chaos infrastructure connected | Deploy ChaosCenter agent to target cluster |
 | Experiment run returns error | Chaos infrastructure offline | Check agent pod status in the target namespace |
 | Probes all failing | Target service not running | Verify the service under test is healthy before running |
-| `chaos_experiment_run` tool missing | "chaos" not in toolsets | Add "chaos" to `HARNESS_TOOLSETS` |
+| `chaos_experiment_run` tool missing | "chaos" not in toolsets | Add `chaos` to `--toolsets` (Docker profiles) or `HARNESS_TOOLSETS` (binary) |
 
 ### GitOps
 
@@ -509,7 +505,7 @@ Quick reference to avoid confusion:
 | All DORA metrics return 0 | No SEI integrations configured | SEI requires SCM/CI integrations to be set up first |
 | `sei_get_teams_list` empty | No org tree configured | Set up org tree and teams in SEI settings |
 | Lead time shows NULL | No PR-to-deploy correlation | Requires both GitHub/GitLab + Harness CD integrations in SEI |
-| `sei_*` tools not found | "sei" not in toolsets | Add "sei" to `HARNESS_TOOLSETS` |
+| `sei_*` tools not found | "sei" not in toolsets | Add `sei` to `--toolsets` (Docker profiles) or `HARNESS_TOOLSETS` (binary) |
 
 ---
 

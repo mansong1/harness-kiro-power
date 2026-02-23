@@ -18,7 +18,7 @@ Universal rules that apply to **every** Harness interaction regardless of domain
    - Service catalog/developer experience → **IDP** tools
    - Deployment sync/drift → **GitOps** tools
 
-4. **Chain tools for deeper context.** For pipeline failures: `list_executions` → `get_execution` → `download_execution_logs`. For security posture: `list_artifacts_scs` → `get_artifact_overview` → `get_artifact_component_remediation`.
+4. **Chain tools for deeper context.** For pipeline failures: `list_executions` → `get_execution` → `download_execution_logs`. For security posture: `scs_list_artifact_sources` → `scs_list_artifacts_per_source` → `scs_get_artifact_overview` → `scs_get_artifact_component_view` → `scs_get_artifact_component_remediation` (add `scs_fetch_compliance_results_for_repo_by_id` when compliance evidence is required).
 
 5. **Summarize results clearly.** Harness API responses can be large. Extract and present the most relevant information — status, errors, timestamps, and actionable items — rather than dumping raw data.
 
@@ -43,7 +43,7 @@ All workflows should produce output in this structure:
 ### Details
 <table or structured list of main results>
 
-### ⚠️ Limitations
+### Limitations
 <anything the power could NOT determine and why>
 
 ### Recommended Next Actions
