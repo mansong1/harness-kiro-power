@@ -340,18 +340,28 @@ Tool names can evolve with upstream releases. For the latest canonical list, che
 | `sei_get_team` | Get details of a team |
 | `sei_get_teams_list` | List teams |
 
-### GitOps (8 tools)
+### GitOps (18 tools)
 
 | Tool | Description |
 |---|---|
-| `list_connectors` (gitops agents) | List GitOps agents via connectors |
-| `list_repositories` (gitops) | List GitOps repositories |
-| `list_environments` (gitops) | List GitOps environments |
-| `get_environment` (gitops) | Get GitOps environment details |
-| `list_services` (gitops) | List GitOps services |
-| `get_service` (gitops) | Get GitOps service details |
-| `list_executions` (gitops) | List GitOps deployment executions |
-| `get_execution` (gitops) | Get GitOps deployment execution details |
+| `gitops_list_agents` | List GitOps agents |
+| `gitops_get_agent` | Get details of a GitOps agent |
+| `gitops_list_applications` | List GitOps applications |
+| `gitops_get_application` | Get details of a GitOps application |
+| `gitops_get_app_resource_tree` | Get resource tree for a GitOps application |
+| `gitops_list_app_events` | List events for a GitOps application |
+| `gitops_get_pod_logs` | Get pod logs for a GitOps application |
+| `gitops_get_managed_resources` | Get managed resources for a GitOps application |
+| `gitops_list_resource_actions` | List actions for a GitOps application resource |
+| `gitops_list_applicationsets` | List GitOps ApplicationSets |
+| `gitops_get_applicationset` | Get details of a GitOps ApplicationSet |
+| `gitops_list_clusters` | List GitOps clusters |
+| `gitops_get_cluster` | Get details of a GitOps cluster |
+| `gitops_list_repositories` | List GitOps repositories |
+| `gitops_get_repository` | Get details of a GitOps repository |
+| `gitops_list_repo_credentials` | List GitOps repository credentials |
+| `gitops_get_repo_credentials` | Get details of GitOps repository credentials |
+| `gitops_get_dashboard_overview` | Get GitOps dashboard overview |
 
 ---
 
@@ -395,6 +405,11 @@ Use this section for intent routing only. Canonical step-by-step procedures live
 | Generate release notes | "generate release notes", "what shipped" | `list_executions`, `get_execution`, `get_pipeline_summary`, `list_services` | `steering/workflows.md` (Workflow E) |
 | Analyze cloud costs | "show cloud cost anomalies", "where can we save money" | `get_ccm_overview`, `list_ccm_recommendations`, `get_ccm_anomalies_summary` | `steering/platform.md` (CCM workflow) |
 | Review security posture | "show SBOM", "critical vulnerabilities" | `scs_list_artifact_sources`, `scs_list_artifacts_per_source`, `scs_get_artifact_overview`, `scs_get_artifact_component_view`, `scs_get_artifact_component_remediation`, `get_all_security_issues` | `steering/platform.md` (SCS + STO workflow) |
+| Track DORA metrics | "deployment frequency", "DORA metrics", "change failure rate" | `sei_get_teams_list`, `sei_deployment_frequency`, `sei_change_failure_rate`, `sei_mttr`, `sei_efficiency_lead_time` | `steering/platform.md` (SEI workflow) |
+| Check feature flags | "list feature flags", "dark mode flag", "rollout status" | `list_fme_workspaces`, `list_fme_feature_flags`, `get_fme_feature_flag_definition` | `steering/platform.md` (FME workflow) |
+| Run chaos experiments | "run chaos experiment", "pod failure resilience" | `chaos_experiments_list`, `chaos_experiment_describe`, `chaos_experiment_run`, `chaos_experiment_run_result` | `steering/platform.md` (Chaos workflow) |
+| Check GitOps sync and drift | "GitOps in sync?", "drift in production" | `gitops_get_dashboard_overview`, `gitops_list_applications`, `gitops_get_application`, `gitops_get_app_resource_tree`, `gitops_list_clusters` | `steering/platform.md` (GitOps workflow) |
+| Query IDP/service catalog | "scorecard for service", "service catalog" | `list_entities`, `get_entity`, `get_scores`, `get_score_summary`, `execute_workflow` | `steering/platform.md` (IDP workflow) |
 
 ---
 
