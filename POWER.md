@@ -572,6 +572,9 @@ If you only need a subset of capabilities:
 **Chaos Engineering:**
 > "List available chaos experiments. What were the results of the last pod-kill run?"
 
+**GitOps:**
+> "Are our GitOps apps in sync? Show drift for production."
+
 **Developer Portal:**
 > "Show me the scorecard for the payments service. What's its maturity level?"
 
